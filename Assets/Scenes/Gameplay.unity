@@ -431,6 +431,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0ced5f662209522459f28be6685d3de7, type: 2}
   prevCardArea: {fileID: 420441367}
   nextCardArea: {fileID: 1819523059}
+  _currCardList: []
 --- !u!1 &369351450
 GameObject:
   m_ObjectHideFlags: 0
@@ -1344,6 +1345,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
   scoreValueText: {fileID: 1145534418}
+  defeatScoreValueText: {fileID: 433689504}
   lifeValueText: {fileID: 1757809834}
   cardCountText: {fileID: 1359479430}
   lifeManager: {fileID: 1044077962}

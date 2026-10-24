@@ -5,6 +5,7 @@ public class UIManager : MonoBehaviour
 {
     [Header("Text")]
     [SerializeField] private TMP_Text scoreValueText;
+    [SerializeField] private TMP_Text defeatScoreValueText;
     [SerializeField] private TMP_Text lifeValueText;
     [SerializeField] private TMP_Text cardCountText;
 
@@ -30,6 +31,7 @@ public class UIManager : MonoBehaviour
     private void UpdateScore(float currScore)
     {
         scoreValueText.text = currScore.ToString();
+        defeatScoreValueText.text = currScore.ToString();
     }
 
     private void UpdateLife(int currLife)
