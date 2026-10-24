@@ -6,11 +6,16 @@ public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
     [SerializeField] private CardManager cardManager;
+    [SerializeField] private LifeManager lifeManager;
+    [SerializeField] private float checkTime = 1f;
+
     public event Action OnPlayerWrong;
     public event Action OnPlayerRight;
     public event Action OnValueChecked;
+    public event Action OnRestarted;
     private event Action<currentSelected> OnButtonPressed;
-    [SerializeField] private float checkTime = 1f;
+
+    
     private enum currentSelected
     {
         Low = 0,
@@ -28,12 +33,14 @@ public class GameManager : MonoBehaviour
     private void OnEnable()
     {
         OnButtonPressed += CheckHiLo;
+        lifeManager.OnDeath += EndGame;
         cardManager.OnCardsCalledBack += DrawCard;
     }
 
     private void OnDisable()
     {
         OnButtonPressed -= CheckHiLo;
+        lifeManager.OnDeath -= EndGame;
         cardManager.OnCardsCalledBack -= DrawCard;
     }
 
@@ -74,6 +81,7 @@ public class GameManager : MonoBehaviour
 
     private void EndGame()
     {
+        Debug.Log("End game");
         StateMachine.ChangeState(DefeatState);
     }
 
@@ -96,7 +104,7 @@ public class GameManager : MonoBehaviour
 
     public void Restart()
     {
-        //Restart everything
+        OnRestarted?.Invoke();
     }
     #endregion
 
@@ -104,7 +112,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("Check HiLo");
         int higher;
-        (int _prevValue, int _nextValue) = cardManager.GetCardsValue();
+        (int _prevValue, int _nextValue, int _cardCount) = cardManager.GetCardsValue();
         
         if (_prevValue < _nextValue)
         {
@@ -121,6 +129,7 @@ public class GameManager : MonoBehaviour
         if (higher == (int)_currentSelected)
         {
             Debug.Log("Player Right");
+            Debug.Log($"Subscribers: {OnPlayerRight?.GetInvocationList().Length ?? 0}");
             OnPlayerRight?.Invoke();
         }
         else
@@ -128,7 +137,15 @@ public class GameManager : MonoBehaviour
             Debug.Log("Player Wrong");
             OnPlayerWrong?.Invoke();
         }
-        StartCoroutine(WaitToCheck());
+        if (_cardCount <= 0)
+        {
+            EndGame();
+        }
+        else
+        {
+            StartCoroutine(WaitToCheck());
+        }
+            
     }
 
     IEnumerator WaitToCheck()
@@ -141,14 +158,6 @@ public class GameManager : MonoBehaviour
     //update score 
     //update life
     //update card count
-    #endregion
-
-    #region ScoreManager
-    //update score 
-    #endregion
-
-    #region LifeManager
-    //update life
     #endregion
 
     #region GameManager

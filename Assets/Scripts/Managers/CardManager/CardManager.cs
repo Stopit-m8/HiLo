@@ -77,7 +77,7 @@ public class CardManager : MonoBehaviour
         OnCardsCalledBack?.Invoke();
     }
 
-    public (int, int) GetCardsValue()
+    public (int, int, int) GetCardsValue()
     {
         int prevValue = _prevCardData.cardValue;
         int nextValue = _nextCardData.cardValue;
@@ -92,7 +92,7 @@ public class CardManager : MonoBehaviour
                 nextValue++;
             }
         }
-        return (prevValue, nextValue);
+        return (prevValue, nextValue, _currCardList.Count);
     }
 
 
