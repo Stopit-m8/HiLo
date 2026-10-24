@@ -856,6 +856,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 803985339}
+  - component: {fileID: 803985340}
   m_Layer: 0
   m_Name: UIManager
   m_TagString: Untagged
@@ -878,6 +879,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 707331895}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &803985340
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 803985338}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2c35e94d8775da4199430a6f5144045, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  scoreValueText: {fileID: 1145534418}
+  lifeValueText: {fileID: 1757809834}
+  cardCountText: {fileID: 1359479430}
+  lifeManager: {fileID: 1044077962}
+  scoreManager: {fileID: 419832633}
+  cardManager: {fileID: 342962786}
 --- !u!1 &892062966
 GameObject:
   m_ObjectHideFlags: 0
@@ -1133,7 +1152,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1006309074}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1337620148}
+        m_TargetAssemblyTypeName: GameManager, Assembly-CSharp
+        m_MethodName: Restart
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1006309074
 MonoBehaviour:
   m_ObjectHideFlags: 0

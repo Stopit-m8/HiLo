@@ -8,6 +8,11 @@ public class ScoreManager : MonoBehaviour
     private float _currScore = 0f;
     public event Action<float> OnScoreChanged;
 
+    private void Awake()
+    {
+        RestartScore();
+    }
+
     private void OnEnable()
     {
         if (GameManager.Instance == null)

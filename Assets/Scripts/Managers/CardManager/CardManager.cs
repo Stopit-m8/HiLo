@@ -12,6 +12,7 @@ public class CardManager : MonoBehaviour
     private List<CardSO> _currCardList;
 
     public event Action OnDrawCard;
+    public event Action<int> OnCountChanged;
     public event Action OnCardsCalledBack;
 
     private GameObject _prevCard;
@@ -34,22 +35,34 @@ public class CardManager : MonoBehaviour
     {
         _currCardList = new List<CardSO>();
         
-        foreach (CardSO card in cardList)
-        {
-            _currCardList.Add(card);
-        }
+        RestartCards();
+    }
+
+    private void RestartCards()
+    {
+        CallBackCards();
+        _currCardList.Clear();
+        _currCardList.AddRange(cardList);
+        OnCountChanged?.Invoke(_currCardList.Count);
     }
 
     public void DrawRandomCard()
     {
+        if (_currCardList.Count == 0)
+        {
+            Debug.LogWarning("No cards left in the deck!");
+            return;
+        }
         int random = UnityEngine.Random.Range(0, _currCardList.Count);
         Debug.Log(_currCardList[random]);
         DrawCard(_currCardList[random]);
         _currCardList.RemoveAt(random);
+        OnCountChanged?.Invoke(_currCardList.Count);
     }
 
     private void DrawCard(CardSO cardData)
     {
+
         if (_prevCard == null)
         {
             _prevCardData = cardData;
@@ -68,8 +81,16 @@ public class CardManager : MonoBehaviour
 
     private void CallBackCards()
     {
-        cardPooling.ReturnObject(_prevCard);
-        cardPooling.ReturnObject(_nextCard);
+        if (_prevCard != null)
+        {
+            cardPooling.ReturnObject(_prevCard);
+        }
+        if (_nextCard != null)
+        {
+            cardPooling.ReturnObject(_nextCard);
+        }
+        
+        
         _prevCard = null;
         _prevCardData = null;
         _nextCard = null;
