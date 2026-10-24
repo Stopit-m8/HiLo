@@ -9,7 +9,7 @@ public class GameplayState : GameState
     public override void EnterState()
     {
         base.EnterState();
-        gameManager.StartGame();
+        Debug.Log("Entering Gameplay");
     }
 
     public override void ExitState()

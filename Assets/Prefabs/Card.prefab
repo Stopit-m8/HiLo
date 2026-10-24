@@ -102,6 +102,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2189449073445969916}
   - component: {fileID: 4264459676271320349}
+  - component: {fileID: 1382834878115533636}
   m_Layer: 0
   m_Name: Card
   m_TagString: Untagged
@@ -186,6 +187,19 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
   m_BlendShapeWeights: []
+--- !u!114 &1382834878115533636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4386629119050727945}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89bb2f4232e64144990e4d8a385eb715, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Card
+  _spriteRenderer: {fileID: 1583433488794996857}
 --- !u!1 &5668978565344511534
 GameObject:
   m_ObjectHideFlags: 0
@@ -267,7 +281,7 @@ SpriteRenderer:
   m_SortingLayer: 1
   m_SortingOrder: 10
   m_MaskInteraction: 0
-  m_Sprite: {fileID: 21300000, guid: 0578083d8ed58634cb9bc06c87933186, type: 3}
+  m_Sprite: {fileID: 21300000, guid: cd0cd9ed5992d22438f5ec3104dfdb0e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

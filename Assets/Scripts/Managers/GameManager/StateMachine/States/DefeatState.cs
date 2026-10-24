@@ -10,7 +10,7 @@ public class DefeatState : GameState
     {
         base.EnterState();
         Time.timeScale = 0f;
-        gameManager.EndGame();
+        Debug.Log("Entering Defeat");
     }
 
     public override void ExitState()
