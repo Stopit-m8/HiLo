@@ -8,7 +8,7 @@ public class CardManager : MonoBehaviour
     [SerializeField] private List<CardSO> cardList;
     [SerializeField] private Transform prevCardArea;
     [SerializeField] private Transform nextCardArea;
-
+    [SerializeField]
     private List<CardSO> _currCardList;
 
     public event Action OnDrawCard;
@@ -24,11 +24,13 @@ public class CardManager : MonoBehaviour
     private void OnEnable()
     {
         GameManager.Instance.OnValueChecked += CallBackCards;
+        GameManager.Instance.OnRestarted += RestartCards;
     }
 
     private void OnDisable()
     {
         GameManager.Instance.OnValueChecked -= CallBackCards;
+        GameManager.Instance.OnRestarted -= RestartCards;
     }
 
     private void Awake()
@@ -40,9 +42,9 @@ public class CardManager : MonoBehaviour
 
     private void RestartCards()
     {
-        CallBackCards();
         _currCardList.Clear();
         _currCardList.AddRange(cardList);
+        CallBackCards();
         OnCountChanged?.Invoke(_currCardList.Count);
     }
 

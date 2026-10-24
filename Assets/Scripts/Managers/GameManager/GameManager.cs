@@ -8,21 +8,24 @@ public class GameManager : MonoBehaviour
     [SerializeField] private CardManager cardManager;
     [SerializeField] private LifeManager lifeManager;
     [SerializeField] private float checkTime = 1f;
+    private bool _isChecking;
+    private Coroutine _checkCoroutine;
+    private Coroutine _defeatCoroutine;
 
     public event Action OnPlayerWrong;
     public event Action OnPlayerRight;
     public event Action OnValueChecked;
     public event Action OnRestarted;
-    private event Action<currentSelected> OnButtonPressed;
+    private event Action<CurrentSelected> OnButtonPressed;
 
     
-    private enum currentSelected
+    private enum CurrentSelected
     {
         Low = 0,
         High = 1
     }
 
-    private currentSelected _currentSelected;
+    private CurrentSelected _currentSelected;
     #region State Machine Variables
 
     public GameStateMachine StateMachine {  get; set; }
@@ -75,40 +78,54 @@ public class GameManager : MonoBehaviour
 
     private void StartGame()
     {
-        StateMachine.ChangeState(GameplayState);
-        DrawCard();
+
     }
 
     private void EndGame()
     {
-        Debug.Log("End game");
-        StateMachine.ChangeState(DefeatState);
+        if (_defeatCoroutine != null)
+        {
+            return;
+        }
+
+        _defeatCoroutine = StartCoroutine(WaitForDefeat());
     }
 
     #region Buttons
     public void HighSelected()
     {
+        if (_isChecking)
+        {
+            return;
+        }
         Debug.Log("High Selected");
-        _currentSelected = currentSelected.High;
+        _currentSelected = CurrentSelected.High;
         DrawCard();
         OnButtonPressed?.Invoke(_currentSelected);
     }
 
     public void LowSelected()
     {
+        if (_isChecking)
+        {
+            return;
+        }
         Debug.Log("Low Selected");
-        _currentSelected = currentSelected.Low;
+        _currentSelected = CurrentSelected.Low;
         DrawCard();
         OnButtonPressed?.Invoke(_currentSelected);
     }
 
     public void Restart()
     {
+        SkipCheckTime();
+        StateMachine.ChangeState(GameplayState);
         OnRestarted?.Invoke();
+        
     }
     #endregion
 
-    private void CheckHiLo(currentSelected _currentSelected)
+    private void CheckHiLo(CurrentSelected _currentSelected)
     {
         Debug.Log("Check HiLo");
         int higher;
@@ -137,30 +154,45 @@ public class GameManager : MonoBehaviour
             Debug.Log("Player Wrong");
             OnPlayerWrong?.Invoke();
         }
+        _checkCoroutine = StartCoroutine(WaitToCheck());
         if (_cardCount <= 0)
         {
             EndGame();
         }
-        else
-        {
-            StartCoroutine(WaitToCheck());
-        }
             
+    }
+
+    private void SkipCheckTime()
+    {
+        if (_checkCoroutine != null)
+        {
+            StopCoroutine(_checkCoroutine);
+            _checkCoroutine = null;
+            OnValueChecked?.Invoke();
+            _isChecking = false;
+        }
+
+        if (_defeatCoroutine != null)
+        {
+            StopCoroutine(_defeatCoroutine);
+            _defeatCoroutine = null;
+        }
+    }
+
+    IEnumerator WaitForDefeat()
+    {
+        yield return StartCoroutine(WaitToCheck());
+        Debug.Log("End game");
+        StateMachine.ChangeState(DefeatState);
+
+        _defeatCoroutine = null;
     }
 
     IEnumerator WaitToCheck()
     {
-        yield return new WaitForSeconds(checkTime);
+        _isChecking = true;
+        yield return new WaitForSecondsRealtime(checkTime);
         OnValueChecked?.Invoke();
+        _isChecking = false;
     }
-
-    #region UIManager
-    //update score 
-    //update life
-    //update card count
-    #endregion
-
-    #region GameManager
-    //restart
-    #endregion
 }
